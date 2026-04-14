@@ -24,9 +24,9 @@
             <fieldset>
                 <legend><?= __('Edit Article') ?></legend>
                 <?php
-                    echo $this->Form->control('user_id', ['options' => $users]);
+                 
                     echo $this->Form->control('title');
-                    echo $this->Form->control('slug');
+                 
                     echo $this->Form->control('body');
                     echo $this->Form->control('published');
                     echo $this->Form->control('tags._ids', ['options' => $tags]);

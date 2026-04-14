@@ -31,9 +31,15 @@ class ArticlesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $slug): void
     {
-        $article = $this->Articles->get($id, contain: ['Users', 'Tags']);
+        //$article = $this->Articles->findBySlug($slug)->firstOrFail(contain: ['Users', 'Tags']);
+
+        $article = $this->Articles->find()
+            ->where(['slug' => $slug])
+            ->contain(['Users', 'Tags'])
+            ->firstOrFail();
+
         $this->set(compact('article'));
     }
 
@@ -47,6 +53,9 @@ class ArticlesController extends AppController
         $article = $this->Articles->newEmptyEntity();
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
+
+            $article->user_id = 1; // hardcoding to admin user for now
+            
             if ($this->Articles->save($article)) {
                 $this->Flash->success(__('The article has been saved.'));
 
@@ -66,9 +75,14 @@ class ArticlesController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $slug)
     {
-        $article = $this->Articles->get($id, contain: ['Tags']);
+
+        $article = $this->Articles
+            ->findBySlug($slug)
+            ->contain(['Tags'])
+            ->firstOrFail();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
             if ($this->Articles->save($article)) {
