@@ -3,6 +3,9 @@
  * @var \App\View\AppView $this
  * @var iterable<\App\Model\Entity\Article> $articles
  */
+
+use Cake\Utility\Inflector;
+
 ?>
 <div class="articles index content">
     <?= $this->Html->link(__('New Article'), ['action' => 'add'], ['class' => 'button float-right']) ?>
@@ -26,7 +29,7 @@
                 <tr>
                     <td><?= $this->Number->format($article->id) ?></td>
                     <td><?= $article->hasValue('user') ? $this->Html->link($article->user->email, ['controller' => 'Users', 'action' => 'view', $article->user->id]) : '' ?></td>
-                    <td><?= h($article->title) ?></td>
+                    <td><?= h(Inflector::humanize($article->title)) ?></td>
                     <td><?= h($article->slug) ?></td>
                     <td><?= h($article->published) ?></td>
                     <td><?= h($article->created) ?></td>

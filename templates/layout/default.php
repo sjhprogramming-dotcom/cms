@@ -33,6 +33,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
+    <!-- Tagify CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <?= $this->fetch('script') ?>
 </head>
 
@@ -58,10 +61,33 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </main>
     <footer>
         <div class="container" style="margin-top: 4rem;">
-             <p style="text-align: center;">Copyright &copy; <?= date('Y') ?>, Learn with Steve. All rights reserved.</p>
-             <p style="text-align: center;">Powered by <?= $this->Html->link('CakePHP', 'https://cakephp.org') ?>.</p>
+            <p style="text-align: center;">Copyright &copy; <?= date('Y') ?>, Learn with Steve. All rights reserved.</p>
+            <p style="text-align: center;">Powered by <?= $this->Html->link('CakePHP', 'https://cakephp.org') ?>.</p>
         </div>
     </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var input = document.querySelector('#tags-input');
+
+            // Initialize Tagify
+            var tagify = new Tagify(input, {
+                delimiters: ",", // comma-separated
+                maxTags: 10,
+                dropdown: {
+                    enabled: 1 // disable suggestions dropdown
+                }
+            });
+
+            // Optional: Listen for tag removal
+            tagify.on('remove', function(e) {
+                console.log("Removed tag:", e.detail.data.value);
+            });
+        });
+    </script>
 </body>
+
+
 
 </html>

@@ -41,6 +41,10 @@ class TagsTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('Lowercase', [
+            'fields' => ['title'],
+        ]);
+
         $this->setTable('tags');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
@@ -67,7 +71,8 @@ class TagsTable extends Table
             ->maxLength('title', 191)
             ->requirePresence('title', 'create')
             ->notEmptyString('title')
-            ->add('title', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('title', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'This tag already exists']);
+            
 
         return $validator;
     }
@@ -81,7 +86,7 @@ class TagsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['title']), ['errorField' => 'title']);
+        $rules->add($rules->isUnique(['title']), ['errorField' => 'title', 'message' => 'This tag already exists']);
 
         return $rules;
     }

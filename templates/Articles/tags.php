@@ -2,6 +2,7 @@
 <h1>
     Articles tagged with
     <?= $this->Text->toList(h($tags), 'or') ?>
+    <hr style="border-color: black;">
 </h1>
 
 <section>
@@ -14,5 +15,7 @@
                 ) ?></h4>
             <span><?= h($article->created) ?></span>
         </article>
+        <br>
+        <hr style="border-color: grey;">
     <?php endforeach; ?>
 </section>

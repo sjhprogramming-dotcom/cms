@@ -43,7 +43,9 @@ class ArticlesTable extends Table
     public function initialize(array $config): void
     {
         parent::initialize($config);
-
+        $this->addBehavior('Lowercase', [
+            'fields' => ['title', 'slug'],
+        ]);
         $this->setTable('articles');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
@@ -125,6 +127,11 @@ class ArticlesTable extends Table
             $entity->slug = substr($sluggedTitle, 0, 191);
         }
 
+        if ($entity->isDirty() && $entity->slug) {
+            $sluggedTitle = Text::slug($entity->title);
+            // trim slug to maximum length defined in schema
+            $entity->slug = substr($sluggedTitle, 0, 191);
+        }
 
     }
 

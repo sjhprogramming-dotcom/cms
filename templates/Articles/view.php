@@ -1,5 +1,7 @@
 <?php
 
+use Cake\Utility\Inflector;
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Article $article
@@ -9,7 +11,7 @@
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Article'), ['action' => 'edit', $article->id], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('Edit Article'), ['action' => 'edit', $article->slug], ['class' => 'side-nav-item']) ?>
             <?= $this->Form->postLink(__('Delete Article'), ['action' => 'delete', $article->id], ['confirm' => __('Are you sure you want to delete # {0}?', $article->id), 'class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('List Articles'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('New Article'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
@@ -55,7 +57,20 @@
                 </blockquote>
             </div>
 
-            <p><b>Tags:</b> <?= h($article->tag_string) ?></p>
+            
+            <p><b>Tags:</b>
+                <?php
+                $tags = array_filter(array_map('trim', explode(',', (string)$article->tag_string)));
+
+                echo implode(', ', array_map(
+                    fn($tag) => $this->Html->link(
+                        h($tag),
+                        ['controller' => 'Articles', 'action' => 'tagged', $tag]
+                    ),
+                    $tags
+                ));
+                ?>
+
             <div class="related">
                 <h4><?= __('Related Tags') ?></h4>
                 <?php if (!empty($article->tags)) : ?>
@@ -76,7 +91,7 @@
                                     <td><?= h($tag->modified) ?></td>
                                     <td class="actions">
                                         <?= $this->Html->link(__('View'), ['controller' => 'Tags', 'action' => 'view', $tag->id]) ?>
-                                        <?= $this->Html->link(__('Edit'), ['controller' => 'Tags', 'action' => 'edit', $tag->id]) ?>
+                                        <?= $this->Html->link(__('Edit'), ['controller' => 'Tags', 'action' => 'edit', $tag->slug]) ?>
                                         <?= $this->Form->postLink(
                                             __('Delete'),
                                             ['controller' => 'Tags', 'action' => 'delete', $tag->id],
