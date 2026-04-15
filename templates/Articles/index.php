@@ -14,7 +14,7 @@ use Cake\Utility\Inflector;
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
+                    
                     <th><?= $this->Paginator->sort('user_id') ?></th>
                     <th><?= $this->Paginator->sort('title') ?></th>
                     <th><?= $this->Paginator->sort('slug') ?></th>
@@ -27,7 +27,7 @@ use Cake\Utility\Inflector;
             <tbody>
                 <?php foreach ($articles as $article): ?>
                 <tr>
-                    <td><?= $this->Number->format($article->id) ?></td>
+                 
                     <td><?= $article->hasValue('user') ? $this->Html->link($article->user->email, ['controller' => 'Users', 'action' => 'view', $article->user->id]) : '' ?></td>
                     <td><?= h(Inflector::humanize($article->title)) ?></td>
                     <td><?= h($article->slug) ?></td>
