@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Article $article
@@ -53,40 +54,42 @@
                     <?= $this->Text->autoParagraph(h($article->body)); ?>
                 </blockquote>
             </div>
+
+            <p><b>Tags:</b> <?= h($article->tag_string) ?></p>
             <div class="related">
                 <h4><?= __('Related Tags') ?></h4>
                 <?php if (!empty($article->tags)) : ?>
-                <div class="table-responsive">
-                    <table>
-                        <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Title') ?></th>
-                            <th><?= __('Created') ?></th>
-                            <th><?= __('Modified') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
-                        </tr>
-                        <?php foreach ($article->tags as $tag) : ?>
-                        <tr>
-                            <td><?= h($tag->id) ?></td>
-                            <td><?= h($tag->title) ?></td>
-                            <td><?= h($tag->created) ?></td>
-                            <td><?= h($tag->modified) ?></td>
-                            <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'Tags', 'action' => 'view', $tag->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'Tags', 'action' => 'edit', $tag->id]) ?>
-                                <?= $this->Form->postLink(
-                                    __('Delete'),
-                                    ['controller' => 'Tags', 'action' => 'delete', $tag->id],
-                                    [
-                                        'method' => 'delete',
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $tag->id),
-                                    ]
-                                ) ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th><?= __('Id') ?></th>
+                                <th><?= __('Title') ?></th>
+                                <th><?= __('Created') ?></th>
+                                <th><?= __('Modified') ?></th>
+                                <th class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($article->tags as $tag) : ?>
+                                <tr>
+                                    <td><?= h($tag->id) ?></td>
+                                    <td><?= h($tag->title) ?></td>
+                                    <td><?= h($tag->created) ?></td>
+                                    <td><?= h($tag->modified) ?></td>
+                                    <td class="actions">
+                                        <?= $this->Html->link(__('View'), ['controller' => 'Tags', 'action' => 'view', $tag->id]) ?>
+                                        <?= $this->Html->link(__('Edit'), ['controller' => 'Tags', 'action' => 'edit', $tag->id]) ?>
+                                        <?= $this->Form->postLink(
+                                            __('Delete'),
+                                            ['controller' => 'Tags', 'action' => 'delete', $tag->id],
+                                            [
+                                                'method' => 'delete',
+                                                'confirm' => __('Are you sure you want to delete # {0}?', $tag->id),
+                                            ]
+                                        ) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

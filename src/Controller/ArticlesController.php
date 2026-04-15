@@ -35,11 +35,11 @@ class ArticlesController extends AppController
     {
         //$article = $this->Articles->findBySlug($slug)->firstOrFail(contain: ['Users', 'Tags']);
 
-        $article = $this->Articles->find()
-            ->where(['slug' => $slug])
-            ->contain(['Users', 'Tags'])
+        // Update retrieving tags with contain()
+        $article = $this->Articles
+            ->findBySlug($slug)
+            ->contain('Tags')
             ->firstOrFail();
-
         $this->set(compact('article'));
     }
 
@@ -63,9 +63,9 @@ class ArticlesController extends AppController
             }
             $this->Flash->error(__('The article could not be saved. Please, try again.'));
         }
-        $users = $this->Articles->Users->find('list', limit: 200)->all();
+       
         $tags = $this->Articles->Tags->find('list', limit: 200)->all();
-        $this->set(compact('article', 'users', 'tags'));
+        $this->set(compact('article', 'tags'));
     }
 
     /**
