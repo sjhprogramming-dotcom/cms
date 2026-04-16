@@ -27,7 +27,7 @@ class Tag extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'title' => true,
+        'title' => true,                //Make Title Readable
         'created' => true,
         'modified' => true,
         'articles' => true,
