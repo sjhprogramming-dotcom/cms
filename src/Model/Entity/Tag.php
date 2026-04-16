@@ -32,4 +32,6 @@ class Tag extends Entity
         'modified' => true,
         'articles' => true,
     ];
+
+    // Ensure the title is always stored in lowercase
 }
