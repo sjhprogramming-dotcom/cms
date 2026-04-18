@@ -23,6 +23,7 @@ class UserPolicy
      */
     public function canEdit(IdentityInterface $user, User $resource)
     {
+        return $this->isLoggedInUser($user, $resource);
     }
 
     /**
@@ -34,6 +35,7 @@ class UserPolicy
      */
     public function canDelete(IdentityInterface $user, User $resource)
     {
+        return $this->isLoggedInUser($user, $resource);
     }
 
     /**
@@ -45,5 +47,12 @@ class UserPolicy
      */
     public function canView(IdentityInterface $user, User $resource)
     {
+        
+    }
+
+    protected function isLoggedInUser(IdentityInterface $user, User $resource): bool
+    {
+        /** @var \Authentication\IdentityInterface $user */
+      return $user->id === $user->getIdentifier();
     }
 }
