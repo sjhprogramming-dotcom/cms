@@ -42,11 +42,27 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('Flash');
+        $this->loadComponent('Authentication.Authentication');  // Load the Authentication component
+        $this->loadComponent('Authorization.Authorization',[
+            'skipAuthorization' => [
+                'display']
+         
+        ]); // Load the Authorization component
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
          */
-        //$this->loadComponent('FormProtection');
+        $this->loadComponent('FormProtection');
+    }
+
+    public function beforeFilter(\Cake\Event\EventInterface $event): void
+    {
+        parent::beforeFilter($event);
+        // for all controllers in our application, make index and view
+        // actions public, skipping the authentication check
+        $this->Authentication->allowUnauthenticated(['index', 'view', 'display']);
+        $isLoggedIn = $this->request->getAttribute('identity') !== null;
+        $this->set('isLoggedIn', $isLoggedIn);
     }
 }
