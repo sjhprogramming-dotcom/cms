@@ -28,7 +28,7 @@ class UsersSeed extends BaseSeed
                 'modified' => date('Y-m-d H:i:s'),
             ],
             [
-                'email' => 'steve@sjh.com',
+                'email' => 'steve@example.com',
                 'password' => 'secret',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s'),
