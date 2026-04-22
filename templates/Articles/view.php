@@ -91,7 +91,7 @@ use Cake\Utility\Inflector;
                                     <td><?= h($tag->modified) ?></td>
                                     <td class="actions">
                                         <?= $this->Html->link(__('View'), ['controller' => 'Tags', 'action' => 'view', $tag->id]) ?>
-                                        <?= $this->Html->link(__('Edit'), ['controller' => 'Tags', 'action' => 'edit', $tag->slug]) ?>
+                                        <?= $this->Html->link(__('Edit'), ['controller' => 'Tags', 'action' => 'edit', $tag->id]) ?>
                                         <?= $this->Form->postLink(
                                             __('Delete'),
                                             ['controller' => 'Tags', 'action' => 'delete', $tag->id],

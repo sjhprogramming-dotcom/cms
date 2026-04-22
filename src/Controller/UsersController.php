@@ -51,6 +51,7 @@ class UsersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $query = $this->Users->find();
         $users = $this->paginate($query);
 
