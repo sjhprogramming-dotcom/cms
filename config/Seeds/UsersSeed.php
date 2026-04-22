@@ -20,10 +20,11 @@ class UsersSeed extends BaseSeed
      */
     public function run(): void
     {
+        $this->table('users')->truncate();
         $data = [
             [
                 'email' => 'cakephp@example.com',
-                'password' => 'secret',
+                'password' => '$2y$12$kFnRgjtyOS9vBB30o7svr.Ts.9f0/jscK8LPvF2zviQVxVF.T.UeC',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s'),
             ],

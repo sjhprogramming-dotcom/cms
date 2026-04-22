@@ -20,6 +20,7 @@ class ArticlesSeed extends BaseSeed
      */
     public function run(): void
     {
+        $this->table('articles')->truncate();
         $data = [
             [
                 'user_id' => 1,
