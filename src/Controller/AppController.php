@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\EventInterface;
 
 /**
  * Application Controller
@@ -43,12 +44,11 @@ class AppController extends Controller
 
         $this->loadComponent('Flash');
         $this->loadComponent('Authentication.Authentication');  // Load the Authentication component
-        $this->loadComponent('Authorization.Authorization',[
-            'skipAuthorization' => [
-                'display']
-         
-        ]); // Load the Authorization component
-
+        $this->loadComponent('Authorization.Authorization', [
+            'skipAuthorization' => ['index', 'view', 'display'] // Skip authorization for these actions
+        ]);    // Load the Authorization component
+     
+     
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
@@ -61,8 +61,18 @@ class AppController extends Controller
         parent::beforeFilter($event);
         // for all controllers in our application, make index and view
         // actions public, skipping the authentication check
-        $this->Authentication->allowUnauthenticated(['index', 'view', 'display']);
+        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'display']);
+       // $this->Authentication->allowUnauthenticated(['index', 'view', 'display']);
         $isLoggedIn = $this->request->getAttribute('identity') !== null;
         $this->set('isLoggedIn', $isLoggedIn);
+    }
+
+    public function beforeRender(EventInterface $event): void
+
+    {
+        parent::beforeRender($event);
+        // Make the authenticated user available in all views
+        $this->set('currentUser', $this->request->getAttribute('identity'));
+        
     }
 }
