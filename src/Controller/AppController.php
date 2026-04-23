@@ -72,7 +72,7 @@ class AppController extends Controller
     {
         parent::beforeRender($event);
         // Make the authenticated user available in all views
-        $this->set('currentUser', $this->request->getAttribute('identity'));
+       // $this->set('currentUser', $this->request->getAttribute('identity'));
         
     }
 }
