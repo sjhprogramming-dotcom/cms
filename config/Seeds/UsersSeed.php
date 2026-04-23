@@ -24,7 +24,7 @@ class UsersSeed extends BaseSeed
         $data = [
             [
                 'email' => 'cakephp@example.com',
-                'password' => 'secret',
+                'password' => '$2y$12$ckzYUX/irGIrVFaN07u51eS5WnhQ.IHYAaYZN6.NDxg9bNzNSQGB6',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s'),
             ],

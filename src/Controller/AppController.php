@@ -45,7 +45,7 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->loadComponent('Authentication.Authentication');  // Load the Authentication component
         $this->loadComponent('Authorization.Authorization', [
-            'skipAuthorization' => ['index', 'view', 'display'] // Skip authorization for these actions
+            'skipAuthorization' => ['index', 'view', 'display', 'activate'] // Skip authorization for these actions
         ]);    // Load the Authorization component
      
      
@@ -61,7 +61,7 @@ class AppController extends Controller
         parent::beforeFilter($event);
         // for all controllers in our application, make index and view
         // actions public, skipping the authentication check
-        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'display']);
+        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'display', 'activate']);
        // $this->Authentication->allowUnauthenticated(['index', 'view', 'display']);
         $isLoggedIn = $this->request->getAttribute('identity') !== null;
         $this->set('isLoggedIn', $isLoggedIn);
