@@ -18,7 +18,7 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         // Configure the login action to not require authentication, preventing
         // the infinite redirect loop issue
-        $this->Authentication->allowUnauthenticated(['login', 'add', 'activate']);
+        $this->Authentication->allowUnauthenticated(['login', 'add', 'activate', 'reactivateemail']);
     }
 
     public function login()
@@ -35,7 +35,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('Your account is not activated. Please check your email for the activation link.'));
                 return $this->redirect(['action' => 'login']);
             }
-            
+
             $target = $this->Authentication->getLoginRedirect() ?? [
                 'controller' => 'Articles',
                 'action' => 'index',
@@ -96,23 +96,16 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
 
-            //Genearate activation token and set expiration time
-            $user->activation_token = bin2hex(random_bytes(32)); // Generate a random token
-            $user->activation_expires = date('Y-m-d H:i:s', strtotime('+1 day')); // Set expiration time to 24 hours from now
+            // //Genearate activation token and set expiration time
+             $user->activation_token = bin2hex(random_bytes(32)); // Generate a random token
+             $user->activation_expires = date('Y-m-d H:i:s', strtotime('+15 mins')); // Set expiration time to 15mins from now
             
-                // create an activation url
-                $activationLink = Router::url([
-                    'controller' => 'Users',
-                    'action' => 'activate',
-                    $user->activation_token
-                ], true);
-
+           
             if ($this->Users->save($user)) {
 
                 // Send activation email
-                $userMailer = new UserMailer();
-                $userMailer->sendActivationEmail($user->toArray(), $activationLink);
-
+                    $this->_sendActivationEmail($user);
+           
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -165,6 +158,41 @@ class UsersController extends AppController
     }
 
 
+
+    public function reactivateemail()
+    {
+        $this->Authorization->skipAuthorization();
+        
+        $this->request->allowMethod(['get','post']);
+
+
+        // GET → just show the form
+        if ($this->request->is('get')) {
+            return;
+        }
+
+       
+        $email = $this->request->getData('email');
+        $user = $this->Users->findByEmail($email)->first();
+
+        if (!$user || $user->isactive) {
+            $this->Flash->success(__('If the account exists and is not activated, we have sent a new activation email.'));
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
+
+        $user->activation_token = bin2hex(random_bytes(32));
+        $user->activation_expires = date('Y-m-d H:i:s', strtotime('+15 mins'));
+
+        if ($this->Users->save($user)) {
+            $this->_sendActivationEmail($user);
+            $this->Flash->success(__('If the account exists and is not activated, we have sent a new activation email.'));
+        } else {
+            $this->Flash->error(__('Unable to send activation email. Please try again later.'));
+        }
+    }
+    
+
+
     /**
      * Activate method to handle account activation via email link
      * @param string|null $token Activation token from the email link
@@ -203,5 +231,32 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'login']);
+    }
+
+
+    private function _generateActivationToken(): string
+    {
+        
+        return bin2hex(random_bytes(32)); // Generate a random token
+    }
+
+    /*  * Private method to send activation email to user
+        * @param array $user User data
+        * @return void
+        */
+    private function _sendActivationEmail($user) 
+    {
+
+        //Genearate activation token and set expiration time
+      
+        // create an activation url
+        $activationLink = Router::url([
+                'controller' => 'Users',
+                'action' => 'activate',
+                $user->activation_token
+            ], true);
+
+        $userMailer = new UserMailer();
+        $userMailer->sendActivationEmail($user->toArray(), $activationLink);
     }
 }
