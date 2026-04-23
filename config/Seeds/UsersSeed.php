@@ -20,6 +20,7 @@ class UsersSeed extends BaseSeed
      */
     public function run(): void
     {
+        $this->table('users')->truncate();
         $data = [
             [
                 'email' => 'cakephp@example.com',

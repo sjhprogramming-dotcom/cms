@@ -20,6 +20,7 @@ class TagsSeed extends BaseSeed
      */
     public function run(): void
     {
+        $this->table('tags')->truncate();
         $data = [
             [
                 'title' => 'CakePHP',
