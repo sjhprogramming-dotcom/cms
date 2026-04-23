@@ -36,6 +36,9 @@ class User extends Entity
         'created' => true,
         'modified' => true,
         'articles' => true,
+        'is_active' => true,
+        'email_token' => true,
+        'email_token_expires' => true,
     ];
 
     /**
@@ -45,6 +48,8 @@ class User extends Entity
      */
     protected array $_hidden = [
         'password',
+        'email_token',
+        'email_token_expires',
     ];
 
     /**

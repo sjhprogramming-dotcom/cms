@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Mailer\MailerAwareTrait;
+use Cake\log\Log;
+
 /**
  * Users Controller
  *
@@ -76,6 +79,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
+    use MailerAwareTrait;
     public function add()
     {
 
@@ -83,7 +87,19 @@ class UsersController extends AppController
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
+            $user->email_token = bin2hex(random_bytes(32)); // Generate a random token
+            $user->email_token_expires = new \DateTime('+1 hour'); // Set expiration time
+
+
             if ($this->Users->save($user)) {
+
+                // Send activation email
+                $activationLink = $this->request->getAttribute('webroot') . 'users/activate/' . $user->email_token;
+              
+                //$this->UserActivationMailer->sendActivationEmail($user->email, $activationLink);
+                
+                $this->getMailer('UserActivation')->send('sendActivationEmail', [$user, $activationLink]);
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
